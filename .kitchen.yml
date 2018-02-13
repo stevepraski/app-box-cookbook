@@ -23,9 +23,9 @@ platforms:
 suites:
   - name: default
     run_list:
+      - recipe[app-box-cookbook::php]
       - recipe[app-box-cookbook::apache_httpd]
     verifier:
       inspec_tests:
         - test/smoke/default
     attributes:
-
