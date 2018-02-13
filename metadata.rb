@@ -6,6 +6,6 @@ source_url 'https://github.com/stevepraski/app-box-cookbook'
 issues_url 'https://github.com/stevepraski/app-box-cookbook/issues'
 description 'Installs/Configures app-box-cookbook'
 long_description 'Installs/Configures app-box-cookbook'
-chef_version '>= >= 13.2.20' if respond_to?(:chef_version)
+chef_version '>= 13.2.20' if respond_to?(:chef_version)
 supports 'centos', '= 7.3'
 version '0.1.0'

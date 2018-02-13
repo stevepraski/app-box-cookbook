@@ -1,2 +1,6 @@
 Metrics/LineLength:
   Enabled: false
+
+Style/SymbolArray:
+  Exclude:
+    - 'recipes/*.rb'
