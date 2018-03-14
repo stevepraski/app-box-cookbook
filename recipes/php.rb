@@ -16,10 +16,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-include_recipe 'yum-ius::default'
-
-php_version = node['app-box']['php_version']
-php_version_squish = php_version.split('.').join
-ius_php_package = 'php' + php_version_squish + 'u'
-
-package ius_php_package
+case node['platform_family']
+when 'debian'
+  apt_update
+  package 'php' + node['app-box']['php_version']
+when 'rhel', 'chefspec'
+  include_recipe 'yum-ius::default'
+  php_version = node['app-box']['php_version']
+  php_version_squish = php_version.split('.').join
+  ius_php_package = 'php' + php_version_squish + 'u'
+  package ius_php_package
+else
+  raise "Unsupported Platform Family: #{node['platform_family']}"
+end

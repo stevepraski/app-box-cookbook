@@ -16,31 +16,69 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-package 'httpd'
+# FIXME: make common code
 
-directory node['app-box']['httpd']['doc_root'] do
-  owner 'root'
-  group 'root'
-  mode '0755'
-  recursive true
-end
+case node['platform_family']
+when 'debian'
+  package 'apache2'
 
-# FIXME: restrict .htaccess overrides
-template 'httpd-conf' do
-  path '/etc/httpd/conf/httpd.conf'
-  source 'httpd.conf.erb'
-  mode '0400'
-  owner 'root'
-  group 'root'
-  variables src_root: node['app-box']['httpd']['src_root'],
-            doc_root: node['app-box']['httpd']['doc_root'],
-            admin_email: node['app-box']['httpd']['admin_email'],
-            server_name: node['app-box']['httpd']['server_name'],
-            listen_port: node['app-box']['httpd']['listen_port']
-  action :create
-  notifies :restart, 'service[httpd]', :delayed
-end
+  directory node['app-box']['httpd']['doc_root'] do
+    owner 'root'
+    group 'root'
+    mode '0755'
+    recursive true
+  end
 
-service 'httpd' do
-  action [:enable, :start]
+  # FIXME: restrict .htaccess overrides
+  template 'httpd-conf' do
+    path '/etc/apache2/apache.conf'
+    source 'httpd.conf.erb'
+    mode '0400'
+    owner 'root'
+    group 'root'
+    variables src_root: node['app-box']['httpd']['src_root'],
+              doc_root: node['app-box']['httpd']['doc_root'],
+              admin_email: node['app-box']['httpd']['admin_email'],
+              server_name: node['app-box']['httpd']['server_name'],
+              listen_port: node['app-box']['httpd']['listen_port']
+    action :create
+    notifies :restart, 'service[apache2]', :delayed
+  end
+
+  service 'apache2' do
+    action [:enable, :start]
+  end
+
+when 'rhel', 'chefspec'
+  package 'httpd'
+
+  directory node['app-box']['httpd']['doc_root'] do
+    owner 'root'
+    group 'root'
+    mode '0755'
+    recursive true
+  end
+
+  # FIXME: restrict .htaccess overrides
+  template 'httpd-conf' do
+    path '/etc/httpd/conf/httpd.conf'
+    source 'httpd.conf.erb'
+    mode '0400'
+    owner 'root'
+    group 'root'
+    variables src_root: node['app-box']['httpd']['src_root'],
+              doc_root: node['app-box']['httpd']['doc_root'],
+              admin_email: node['app-box']['httpd']['admin_email'],
+              server_name: node['app-box']['httpd']['server_name'],
+              listen_port: node['app-box']['httpd']['listen_port']
+    action :create
+    notifies :restart, 'service[httpd]', :delayed
+  end
+
+  service 'httpd' do
+    action [:enable, :start]
+  end
+
+else
+  raise "Unsupported Platform Family: #{node['platform_family']}"
 end

@@ -8,6 +8,7 @@ description 'Installs/Configures app-box-cookbook'
 long_description 'Installs/Configures app-box-cookbook'
 chef_version '>= 13.2.20' if respond_to?(:chef_version)
 supports 'centos'
-version '0.1.0'
+supports 'ubuntu', '= 16.04'
+version '0.1.1'
 
 depends 'yum-ius'
