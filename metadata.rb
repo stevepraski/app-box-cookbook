@@ -11,4 +11,6 @@ supports 'centos'
 supports 'ubuntu', '= 16.04'
 version '0.1.1'
 
+depends 'apt', '~> 6.1'
 depends 'yum-ius'
+depends 'postgresql' # 7.x not released for supermarket yet, so over-ride in Berksfile
