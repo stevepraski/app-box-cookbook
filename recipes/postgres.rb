@@ -22,7 +22,7 @@ postgresql_server_install 'Postgresql Server' do
 end
 
 postgresql_server_install 'Postgresql Server' do
-  password 'PgP4ssw0d'
+  password node['app-box']['db']['root_password']
   port 5432
   action :create
 end
@@ -33,7 +33,7 @@ postgresql_server_conf 'PostgreSQL Config Replacement' do
 end
 
 postgresql_user 'app-user' do
-  password 'UserP4ssword'
+  password node['app-box']['db']['user_password']
   createdb true
 end
 
